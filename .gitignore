@@ -1,0 +1,11 @@
+# build directories
+public/
+# legacy
+build/
+dist/
+
+# Dependency directories
+node_modules/
+
+# VS Code
+.vscode/*
