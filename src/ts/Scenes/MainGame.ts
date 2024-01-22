@@ -6,17 +6,16 @@ export default class MainGame extends Phaser.Scene {
 	 */
 	public static Name = "MainGame";
 
-	private tileSize = 10;
+	private tileSize = 16;
 
 	private range(start: number, end: number): number[] {
 		return Array.from(Array(end - start + 1).keys()).map(x => x + start);
 	}
 
 	private randomGreenery(): number {
-		const greenery = [25, 30, 65, 155, 156].concat(
-			this.range(120, 123),
-			this.range(124, 126),
-			this.range(124, 126))
+		const greenery = [25].concat(
+			this.range(5, 7),
+			this.range(50, 52))
 		//const idx = x % greenery.length;
 		const idx = Math.floor(Math.random() * greenery.length)
 		return greenery[idx];
