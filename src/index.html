@@ -7,6 +7,8 @@
 	<title>Bone Shop</title>
 	<link rel="shortcut icon" href="favicon.ico" />
 	<link rel="stylesheet" href="app.css" type="text/css" />
+	<link rel="stylesheet" href="embed-console.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
 	<script src="lib/phaser.min.js"></script>
 </head>
 <body>
@@ -14,8 +16,19 @@
 		<h1>Bone Shop</h1>
 	</div>
 <div id="outer">
-	<div id="content"></div>
+	<table>
+		<tr>
+			<td>
+				<div id="content"></div>
+			</td>
+			<td>
+				<div id="console">
+				</div>
+			</td>
+		</tr>
+	</table>
 	<!--If using the project the TypeScript files will automatically be combined into the following file. Update as needed.-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"-></script>
 	<script src=" app.js"></script>
 </div>
 </body>
