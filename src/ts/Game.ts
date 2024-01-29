@@ -8,8 +8,8 @@ import MainGame from "./Scenes/MainGame";
 import MainSettings from "./Scenes/MainSettings";
 import EmbedConsole from './EmbedConsole';
 
-const scaleSize = 400;
-const gameSize = 240;
+const scaleSize = 560;
+const gameSize = 320;
 
 type CoolGuy = {
   name: string,
