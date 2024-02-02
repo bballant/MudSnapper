@@ -9,7 +9,7 @@ import MainSettings from "./Scenes/MainSettings";
 import EmbedConsole from './EmbedConsole';
 
 const scaleSize = 560;
-const gameSize = 320;
+const gameSize = 420;
 
 type CoolGuy = {
   name: string,
@@ -80,11 +80,12 @@ window.onload = (): void => {
   const cool = new EmbedConsole('console');
   cool.add({
     input: "",
-    output: "<b>Event Triggered</b>: The answers to life greatest question answered.",
+    output: "<b>Welcome to MUDSNAPPER!</b><br/>type 'help' for \"help\" (muhuhahaha!)",
     klass: 'log-event',
     javascript: false
   });
 
+  /*
   const coolGuy: CoolGuy = { name: "Brian", job: "Messin'" }
   window.myGlobalVar = coolGuy
 
@@ -92,4 +93,5 @@ window.onload = (): void => {
     input: "",
     output: JSON.stringify(window.myGlobalVar)
   })
+  */
 };

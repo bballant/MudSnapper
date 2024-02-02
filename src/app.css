@@ -11,6 +11,8 @@ body {
   width:100%;
   display: flex;
   justify-content: center;
+  font-family: monospace;
+  white-space: pre;
 }
 
 #content {
