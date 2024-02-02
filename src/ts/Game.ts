@@ -7,6 +7,7 @@ import Utilities from "./Utilities";
 import MainGame from "./Scenes/MainGame";
 import MainSettings from "./Scenes/MainSettings";
 import EmbedConsole from './EmbedConsole';
+import { Hero } from './Scenes/Types'
 
 const scaleSize = 560;
 const gameSize = 420;
@@ -20,6 +21,8 @@ type CoolGuy = {
 declare global {
   interface Window {
     myGlobalVar: CoolGuy;
+    hero: Hero;
+    commands: string[];
   }
 }
 
