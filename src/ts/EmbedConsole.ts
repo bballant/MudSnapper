@@ -61,12 +61,12 @@ class EmbedConsole {
   }
 
   defaultHighlightCallback(logItem: HTMLElement): void {
-    const hljs = (window as any).hljs;
-    if (!hljs) return;
-    const codes = logItem.getElementsByTagName('code');
-    for (let i = 0; i < codes.length; i++) {
-      hljs.highlightBlock(codes[i]);
-    }
+    //const hljs = (window as any).hljs;
+    //if (!hljs) return;
+    //const codes = logItem.getElementsByTagName('code');
+    //for (let i = 0; i < codes.length; i++) {
+    //  hljs.highlightBlock(codes[i]);
+    //}
   }
 
   buildLayout(containerId: string): {
@@ -199,4 +199,4 @@ class EmbedConsole {
   }
 }
 
-export default EmbedConsole;
+export default EmbedConsole

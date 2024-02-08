@@ -13,7 +13,7 @@ export default class MainGame extends Phaser.Scene {
   private hero: Hero = { x: 0, y: 0 };
   private heroSprite: Phaser.GameObjects.Sprite;
   private stepTimer = 0;
-  private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
+  //private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
 
   private range(start: number, end: number): number[] {
     return Array.from(Array(end - start + 1).keys()).map(x => x + start);
@@ -101,7 +101,7 @@ export default class MainGame extends Phaser.Scene {
   }
   public create(): void {
     Utilities.LogSceneMethodEntry("MainGame", "create");
-    this.cursors = this.input.keyboard.createCursorKeys();
+    //this.cursors = this.input.keyboard.createCursorKeys();
     this.gameBoard = this.initGameBoard();
     window.hero = { x: 0, y: 0 };
     window.commands = [];

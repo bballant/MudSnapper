@@ -8,6 +8,7 @@ import MainGame from "./Scenes/MainGame";
 import MainSettings from "./Scenes/MainSettings";
 import EmbedConsole from './EmbedConsole';
 import { Hero } from './Scenes/Types'
+import { CodeJar } from 'codejar';
 
 const scaleSize = 560;
 const gameSize = 420;
@@ -80,6 +81,15 @@ window.onload = (): void => {
   const resize = resizeFn(scaleSize, scaleSize);
   resize();
   window.addEventListener("resize", resize, true);
+
+  const highlight = (editor: HTMLElement) => {
+    let code = editor.textContent
+    code = code.replace('foo', '<span style="color: red">foo</span>')
+    editor.innerHTML = code
+  }
+
+  const jar = CodeJar(document.querySelector("#editor"), highlight);
+
   const cool = new EmbedConsole('console');
   cool.add({
     input: "",
