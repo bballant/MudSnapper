@@ -19,6 +19,19 @@ type CommandCall = {
 
 type Script = CommandCall[];
 
+type Point = {
+    x: number,
+    y: number
+}
+
+type Color = 'red' | 'yellow' | 'brown' | 'none'
+
+type State = {
+    loc: Point,
+    rot: number,
+    pen: Color
+}
+
 function parseScript(scriptStr: string): Script | undefined {
     const tokens = scriptStr.trim().split(/\s+/);
     const callAcc: CommandCall[] = [];
@@ -67,13 +80,8 @@ function newBoard(size: number): number[][] {
     return cool;
 }
 
-type Point = {
-    x: number,
-    y: number
-}
-
 function printBoard(board: number[][]) {
-    console.log([...board].reverse().map(row => row.join(' ')).join('\n'));
+    console.log([...board].reverse().map(row => row.map(cell => cell ? '■' : '□').join(' ')).join('\n'));
 }
 
 function drawLine(board: number[][], start: Point, end: Point): number[][] {
@@ -146,45 +154,127 @@ function runScript(board: number[][], start: Point, script: Script): number[][] 
     for (let i = 0; i < script.length; i++) {
         switch (script[i].command) {
             case ('forward'):
-                const val = oneNumParam(script[i]);
-                const end = getEndpoint(begin, degrees, val);
+                const end = getEndpoint(begin, degrees, oneNumParam(script[i]));
                 board = drawLine(board, begin, end);
                 begin = end;
                 break;
+            case ('back'):
+                const end2 = getEndpoint(begin, degrees, -1 * oneNumParam(script[i]));
+                board = drawLine(board, begin, end2);
+                begin = end2;
+                break;
             case ('left'):
-                degrees = degrees + parseInt(script[i].params[0])
+                degrees = degrees + oneNumParam(script[i])
+                break;
+            case ('right'):
+                degrees = degrees - oneNumParam(script[i])
                 break;
         }
     }
     return board;
 }
 
-//const script =
-//    parseScript(`
-//        forward 10
-//        left 90
-//        forward 10
-//        left 90
-//        forward 10
-//        left 90
-//        forward 10
-//    `);
-//
+function getPointsForLine(start: Point, end: Point): Point[] {
+    let x0 = start.x;
+    let y0 = start.y;
+    const x1 = end.x;
+    const y1 = end.y;
+
+    const dx = Math.abs(x1 - x0);
+    const dy = Math.abs(y1 - y0);
+    const sx = (x0 < x1) ? 1 : -1;
+    const sy = (y0 < y1) ? 1 : -1;
+    let err = dx - dy;
+
+    const ret: Point[] = [];
+    while (true) {
+        ret.push({x: x0, y: y0});
+
+        if (x0 === x1 && y0 === y1) break;
+
+        const e2 = 2 * err;
+        if (e2 > -dy) {
+            err -= dy;
+            x0 += sx;
+        }
+        if (e2 < dx) {
+            err += dx;
+            y0 += sy;
+        }
+    }
+
+    return ret;
+}
+
+
+function fillStatesForLine(currState: State, start: Point, end: Point): State[] {
+    let ret: State[] = [];
+    return [];
+}
+
+function scriptToStates(start: Point, script: Script): State[] {
+    let currState: State = {
+        loc: start,
+        rot: 0,
+        pen: 'brown'
+    }
+    let states: State[] = []
+    for (let i = 0; i < script.length; i++) {
+        const cmd = script[i].command;
+        switch (cmd) {
+            case ('forward'):
+            case ('back'):
+                const mult = cmd == 'back' ? -1 : 1;
+                const end = getEndpoint(currState.loc, currState.rot, mult * oneNumParam(script[i]));
+                const points = getPointsForLine(currState.loc, end);
+                for (let p of points) {
+                    currState.loc = p;
+                    states.push({
+                        loc: currState.loc,
+                        rot: currState.rot,
+                        pen: currState.pen
+                    })
+                }
+                break;
+            case ('left'):
+            case ('right'):
+                const mult1 = cmd == 'right' ? -1 : 1;
+                currState.rot = currState.rot + mult1 * oneNumParam(script[i])
+                states.push({
+                    loc: currState.loc,
+                    rot: currState.rot,
+                    pen: currState.pen
+                })
+                break;
+        }
+    }
+    return states;
+}
+
 const script =
     parseScript(`
+        left 90
         forward 5
         left 30
-        forward 3
-        left 70
         forward 10
-        left 90
+        back 10 
+        right 20
         forward 10
+        back 10 
+        right 20
+        forward 10
+        back 10 
+        right 20
+        forward 10
+        back 10 
     `);
 
 
 if (script) {
     console.log(script);
     let leBoard = newBoard(20);
-    leBoard = runScript(leBoard, { x: 5, y: 5 }, script);
+    let start = { x: 10, y: 0 };
+    leBoard = runScript(leBoard, start, script);
     printBoard(leBoard);
+    console.log(scriptToStates(start, script));
 }
