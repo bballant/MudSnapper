@@ -9,6 +9,7 @@ import MainSettings from "./Scenes/MainSettings";
 import EmbedConsole from './EmbedConsole';
 import { Hero } from './Scenes/Types'
 import { CodeJar } from 'codejar';
+import { State } from './Logo';
 
 const scaleSize = 560;
 const gameSize = 420;
@@ -24,6 +25,7 @@ declare global {
     myGlobalVar: CoolGuy;
     hero: Hero;
     commands: string[];
+    states: State[];
   }
 }
 

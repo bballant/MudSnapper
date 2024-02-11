@@ -1,5 +1,6 @@
 import Utilities from "../Utilities";
 import { Cell, CellType, Hero } from "./Types";
+import { State, gimmeSomeStates } from "../Logo";
 
 export default class MainGame extends Phaser.Scene {
   /**
@@ -85,26 +86,64 @@ export default class MainGame extends Phaser.Scene {
     window.commands = commands.reverse();
   }
 
+  private drawMudForState(state: State): void {
+    const heroX = (state.loc.x * this.tileSize) + (this.tileSize / 2);
+    const heroY = (state.loc.y * this.tileSize) + (this.tileSize / 2);
+    this.add.image(heroX, heroY, "full", 712);
+  }
+
+  private drawHeroForState(state: State): void {
+    const heroX = (state.loc.x * this.tileSize) + (this.tileSize / 2);
+    const heroY = (state.loc.y * this.tileSize) + (this.tileSize / 2);
+    this.heroSprite.x = heroX;
+    this.heroSprite.y = heroY;
+    this.heroSprite.angle = state.rot;
+    this.heroSprite.setDepth(1);
+  }
+
+  private handleStep(): void {
+    const states = window.states.reverse();
+    if (!states || states.length == 0) return;
+    const state = states.pop();
+    if (state) {
+      this.drawMudForState(state);
+      this.drawHeroForState(state);
+    }
+    window.states = states.reverse();
+  }
+
   public update(time: number, delta: number): void {
     this.hero = window.hero;
     if (this.stepTimer > 200) {
-      this.handleCommands();
+      this.handleStep();
       this.stepTimer = 0;
     } else {
       this.stepTimer = this.stepTimer + delta
     }
-    const heroX = (this.hero.x * this.tileSize) + (this.tileSize / 2);
-    const heroY = (this.hero.y * this.tileSize) + (this.tileSize / 2);
-    this.heroSprite.x = heroX;
-    this.heroSprite.y = heroY;
-    this.heroSprite.setDepth(1);
   }
+
+//  public update(time: number, delta: number): void {
+//    this.hero = window.hero;
+//    if (this.stepTimer > 200) {
+//      this.handleCommands();
+//      this.stepTimer = 0;
+//    } else {
+//      this.stepTimer = this.stepTimer + delta
+//    }
+//    const heroX = (this.hero.x * this.tileSize) + (this.tileSize / 2);
+//    const heroY = (this.hero.y * this.tileSize) + (this.tileSize / 2);
+//    this.heroSprite.x = heroX;
+//    this.heroSprite.y = heroY;
+//    this.heroSprite.setDepth(1);
+//  }
+
   public create(): void {
     Utilities.LogSceneMethodEntry("MainGame", "create");
     //this.cursors = this.input.keyboard.createCursorKeys();
     this.gameBoard = this.initGameBoard();
     window.hero = { x: 0, y: 0 };
     window.commands = [];
+    window.states = [];
     this.hero = window.hero;
     for (let x = 0; x < this.gameBoard.length; x = x + 1) {
       for (let y = 0; y < this.gameBoard[x].length; y = y + 1) {
@@ -164,6 +203,11 @@ export default class MainGame extends Phaser.Scene {
         steps.push("drop")
       }
       window.commands = steps;
+      window.states = gimmeSomeStates().map((state) => {
+        state.loc = {x: state.loc.x, y: this.gameBoard[state.loc.x].length - state.loc.y};
+        state.rot = -1 * state.rot;
+        return state;
+      });
     }
   }
 }

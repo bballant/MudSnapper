@@ -1,6 +1,6 @@
-#!/usr/bin/env tsx
+// #!/usr/bin/env tsx
 
-type Command =
+export type Command =
     'forward' |
     'back' |
     'left' |
@@ -11,22 +11,22 @@ const COMMANDS: Command[] = [
     'forward', 'back', 'left', 'right', 'repeat'
 ]
 
-type CommandCall = {
+export type CommandCall = {
     command: Command
     params: string[]
     subscript: Script | undefined
 }
 
-type Script = CommandCall[];
+export type Script = CommandCall[];
 
-type Point = {
+export type Point = {
     x: number,
     y: number
 }
 
-type Color = 'red' | 'yellow' | 'brown' | 'none'
+export type Color = 'red' | 'yellow' | 'brown' | 'none'
 
-type State = {
+export type State = {
     loc: Point,
     rot: number,
     pen: Color
@@ -269,7 +269,11 @@ const script =
         back 10 
     `);
 
+export function gimmeSomeStates(): State[] {
+    return scriptToStates({x: 5, y: 5}, script);
+}
 
+/*
 if (script) {
     console.log(script);
     let leBoard = newBoard(20);
@@ -278,3 +282,4 @@ if (script) {
     printBoard(leBoard);
     console.log(scriptToStates(start, script));
 }
+*/
