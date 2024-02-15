@@ -1,4 +1,7 @@
-// #!/usr/bin/env tsx
+#!/usr/bin/env tsx
+import Logger from "./Logger"
+
+console.log(Logger);
 
 export type Command =
     'forward' |
@@ -81,41 +84,32 @@ function newBoard(size: number): number[][] {
 }
 
 function printBoard(board: number[][]) {
-    console.log([...board].reverse().map(row => row.map(cell => cell ? '■' : '□').join(' ')).join('\n'));
-}
-
-function drawLine(board: number[][], start: Point, end: Point): number[][] {
-    let x0 = start.x;
-    let y0 = start.y;
-    const x1 = end.x;
-    const y1 = end.y;
-
-    const dx = Math.abs(x1 - x0);
-    const dy = Math.abs(y1 - y0);
-    const sx = (x0 < x1) ? 1 : -1;
-    const sy = (y0 < y1) ? 1 : -1;
-    let err = dx - dy;
-
-    while (true) {
-        // Set the value for the point on the line
-        if (x0 >= 0 && x0 < board.length && y0 >= 0 && y0 < board[0].length) {
-            board[y0][x0] = 1;
+    let x = 0;
+    if (!board[x]) return;
+    let y = board[x].length - 1
+    while (y >= 0) {
+        let acc = ""
+        x = 0
+        while (x < board.length) {
+            const cell = board[x][y]
+            acc += (cell ? '■ ' : '□ ');
+            x++;
         }
-
-        if (x0 === x1 && y0 === y1) break;
-
-        const e2 = 2 * err;
-        if (e2 > -dy) {
-            err -= dy;
-            x0 += sx;
-        }
-        if (e2 < dx) {
-            err += dx;
-            y0 += sy;
-        }
+        Logger.log(acc);
+        y--;
     }
 
-    return board;
+
+    //
+    //    for (let x = 0; x < board.length; x++) {
+    //        let acc = "";
+    //        for (let y = 0; y < board[x].length; y++) {
+    //            const cell = board[x][y]
+    //            acc += (cell ? '■ ' : '□ ');
+    //        }
+    //        Logger.log(acc);
+    //    }
+    //Logger.log([...board].reverse().map(row => row.map(cell => cell ? '■' : '□').join(' ')).join('\n'));
 }
 
 function getEndpoint(start: Point, degrees: number, distance: number): Point {
@@ -129,17 +123,6 @@ function getEndpoint(start: Point, degrees: number, distance: number): Point {
     return end;
 }
 
-function drawLineFrom(board: number[][], start: Point, degrees: number, distance: number): number[][] {
-    const radians = degrees * (Math.PI / 180);
-
-    const end: Point = {
-        x: start.x + Math.round(distance * Math.cos(radians)),
-        y: start.y + Math.round(distance * Math.sin(radians))
-    };
-
-    return drawLine(board, start, end);
-}
-
 function oneNumParam(call: CommandCall): number {
     const ret = parseInt(call.params[0]);
     if (call.params.length != 1 || Number.isNaN(ret)) {
@@ -148,31 +131,6 @@ function oneNumParam(call: CommandCall): number {
     return ret;
 }
 
-function runScript(board: number[][], start: Point, script: Script): number[][] {
-    let degrees = 0;
-    let begin = start;
-    for (let i = 0; i < script.length; i++) {
-        switch (script[i].command) {
-            case ('forward'):
-                const end = getEndpoint(begin, degrees, oneNumParam(script[i]));
-                board = drawLine(board, begin, end);
-                begin = end;
-                break;
-            case ('back'):
-                const end2 = getEndpoint(begin, degrees, -1 * oneNumParam(script[i]));
-                board = drawLine(board, begin, end2);
-                begin = end2;
-                break;
-            case ('left'):
-                degrees = degrees + oneNumParam(script[i])
-                break;
-            case ('right'):
-                degrees = degrees - oneNumParam(script[i])
-                break;
-        }
-    }
-    return board;
-}
 
 function getPointsForLine(start: Point, end: Point): Point[] {
     let x0 = start.x;
@@ -187,8 +145,9 @@ function getPointsForLine(start: Point, end: Point): Point[] {
     let err = dx - dy;
 
     const ret: Point[] = [];
+    // eslint-disable-next-line no-constant-condition
     while (true) {
-        ret.push({x: x0, y: y0});
+        ret.push({ x: x0, y: y0 });
 
         if (x0 === x1 && y0 === y1) break;
 
@@ -206,28 +165,22 @@ function getPointsForLine(start: Point, end: Point): Point[] {
     return ret;
 }
 
-
-function fillStatesForLine(currState: State, start: Point, end: Point): State[] {
-    let ret: State[] = [];
-    return [];
-}
-
 function scriptToStates(start: Point, script: Script): State[] {
-    let currState: State = {
+    const currState: State = {
         loc: start,
         rot: 0,
         pen: 'brown'
     }
-    let states: State[] = []
+    const states: State[] = []
     for (let i = 0; i < script.length; i++) {
         const cmd = script[i].command;
         switch (cmd) {
             case ('forward'):
-            case ('back'):
+            case ('back'): {
                 const mult = cmd == 'back' ? -1 : 1;
                 const end = getEndpoint(currState.loc, currState.rot, mult * oneNumParam(script[i]));
                 const points = getPointsForLine(currState.loc, end);
-                for (let p of points) {
+                for (const p of points) {
                     currState.loc = p;
                     states.push({
                         loc: currState.loc,
@@ -236,8 +189,9 @@ function scriptToStates(start: Point, script: Script): State[] {
                     })
                 }
                 break;
+            }
             case ('left'):
-            case ('right'):
+            case ('right'): {
                 const mult1 = cmd == 'right' ? -1 : 1;
                 currState.rot = currState.rot + mult1 * oneNumParam(script[i])
                 states.push({
@@ -246,9 +200,30 @@ function scriptToStates(start: Point, script: Script): State[] {
                     pen: currState.pen
                 })
                 break;
+            }
         }
     }
     return states;
+}
+
+function runScript(board: number[][], start: Point, script: Script): number[][] {
+    const states = scriptToStates(start, script);
+    // copy of input array
+    const bd: number[][] = board.map(row => [...row]);
+    for (const state of states) {
+        if (bd.length > state.loc.x && bd[state.loc.x].length > state.loc.y) {
+            bd[state.loc.x][state.loc.y] = 1
+        }
+    }
+    return bd;
+}
+
+export function runScriptInConsole(board: number[][], script) {
+    Logger.log(script);
+    const start = { x: 10, y: 0 };
+    const leBoard = runScript(board, start, script);
+    printBoard(leBoard);
+    Logger.log(scriptToStates(start, script));
 }
 
 const script =
@@ -257,29 +232,28 @@ const script =
         forward 5
         left 30
         forward 10
-        back 10 
+        back 10
         right 20
         forward 10
-        back 10 
+        back 10
         right 20
         forward 10
-        back 10 
+        back 10
         right 20
         forward 10
-        back 10 
+        back 10
     `);
 
 export function gimmeSomeStates(): State[] {
-    return scriptToStates({x: 5, y: 5}, script);
+    return scriptToStates({ x: 5, y: 5 }, script);
 }
 
-/*
-if (script) {
-    console.log(script);
-    let leBoard = newBoard(20);
-    let start = { x: 10, y: 0 };
-    leBoard = runScript(leBoard, start, script);
-    printBoard(leBoard);
-    console.log(scriptToStates(start, script));
-}
-*/
+//export function runTheScriptInConsole() {
+Logger.log(script);
+let leBoard = newBoard(40);
+const start = { x: 20, y: 0 };
+leBoard = runScript(leBoard, start, script);
+printBoard(leBoard);
+//Logger.log(scriptToStates(start, script));
+//console.log(leBoard);
+//}
