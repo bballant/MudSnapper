@@ -25,16 +25,17 @@
 .console-sandbox > ul {
   padding: 0;
   height: 240px;
-  border: solid 1px #cfd6d9;
+  /*border: solid 1px #cfd6d9;*/
   border-bottom: none;
   margin: 0;
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
   list-style: none;
   position: relative;
 }
 
 .console-sandbox > ul > li {
-  border-bottom: solid 1px #cfd6d9;
+  /*border-bottom: solid 1px #cfd6d9;*/
   width: 100%;
 }
 
@@ -79,7 +80,8 @@
   font-family: monospace;
   padding-left: 25px;
   position: relative;
-  border: solid 1px #cfd6d9;
+  border-top: solid 1px #cfd6d9;
+  /*border: solid 1px #cfd6d9;*/
   overflow: hidden;
   max-height: 100px;
   margin-top: -1px;

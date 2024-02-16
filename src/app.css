@@ -16,7 +16,9 @@ body {
 }
 
 #content {
-  border: 0.05em solid black;
+  /*border: 0.05em solid black;*/
+  width: 560px;
+  height: 562px; /* extra pixels creates a little border at bottom */
 }
 
 #outer {
@@ -45,9 +47,15 @@ table #consoletable {
 }
 
 table #infotable {
-    width: 400px;
+    width: 560px;
     height: 80px;
     border-collapse: collapse;
+    background-color: #282a36;
+}
+
+table #infotable ul {
+    list-style: none;
+    overflow: hidden;
 }
 
 td {
@@ -77,27 +85,7 @@ td {
     tab-size: 4;
 }
 
-/*
-textarea .scratch {
-    width: 100%;
-    height: 100%; 
-    box-sizing: border-box;
-}
-*/
-
 #console {
     width: 400px;
     height: 240px;
 }
-
-
-/*
-
-#console textarea {
-    width: 100%;
-    height: 100%;
-    border: none;
-    resize: none; Prevents resizing he textarea
-    box-sizing: border-box; Includes padding and border in the width and height
-}
-*/

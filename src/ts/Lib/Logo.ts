@@ -83,6 +83,8 @@ function newBoard(size: number): number[][] {
     return cool;
 }
 
+// It has to rotate the board to print it
+// so that origin is bottom left
 function printBoard(board: number[][]) {
     let x = 0;
     if (!board[x]) return;
@@ -98,18 +100,6 @@ function printBoard(board: number[][]) {
         Logger.log(acc);
         y--;
     }
-
-
-    //
-    //    for (let x = 0; x < board.length; x++) {
-    //        let acc = "";
-    //        for (let y = 0; y < board[x].length; y++) {
-    //            const cell = board[x][y]
-    //            acc += (cell ? '■ ' : '□ ');
-    //        }
-    //        Logger.log(acc);
-    //    }
-    //Logger.log([...board].reverse().map(row => row.map(cell => cell ? '■' : '□').join(' ')).join('\n'));
 }
 
 function getEndpoint(start: Point, degrees: number, distance: number): Point {
@@ -229,23 +219,25 @@ export function runScriptInConsole(board: number[][], script) {
 const script =
     parseScript(`
         left 90
-        forward 5
+        forward 8
         left 30
-        forward 10
-        back 10
+        forward 12
+        back 12
         right 20
-        forward 10
-        back 10
+        forward 13
+        back 13
         right 20
-        forward 10
-        back 10
+        forward 11
+        back 11
         right 20
-        forward 10
-        back 10
+        forward 13
+        back 13
+        left 30
+        back 8
     `);
 
 export function gimmeSomeStates(): State[] {
-    return scriptToStates({ x: 5, y: 5 }, script);
+    return scriptToStates({ x: 20, y: 5 }, script);
 }
 
 //export function runTheScriptInConsole() {
@@ -257,3 +249,15 @@ printBoard(leBoard);
 //Logger.log(scriptToStates(start, script));
 //console.log(leBoard);
 //}
+
+/*
+TODO:
+* mudlang
+*  rename
+*  implement 'color'
+*  implement 'repeat'
+* on fe:
+*  fix scrollbars
+*  console interaction
+*  editor interaction
+*/

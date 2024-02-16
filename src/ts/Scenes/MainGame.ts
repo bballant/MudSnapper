@@ -16,9 +16,10 @@ export default class MainGame extends Phaser.Scene {
       // more of a chance of getting grass
       'grass', 'grass', 'grass', 'grass', 'grass',
       'grass', 'grass', 'grass', 'grass', 'grass',
+      'lightgrass', 'lightgrass', 'lightgrass', 'lightgrass',
       'lightgrass', 'lightgrass',
-      'lightgrass', 'lightgrass',
-      'tree', 'lightgrass', 'grove', 'bush'
+      'bush', 'bush', 'bush',
+      'tree', 'grove',
     ];
     const idx = Math.floor(Math.random() * greenery.length);
     return greenery[idx];
@@ -50,7 +51,8 @@ export default class MainGame extends Phaser.Scene {
   private drawMudForState(state: State): void {
     const heroX = (state.loc.x * this.tileSize) + (this.tileSize / 2);
     const heroY = (state.loc.y * this.tileSize) + (this.tileSize / 2);
-    this.add.image(heroX, heroY, "full", 712);
+    this.add.image(heroX, heroY, "full", (32 * 32) + 2);
+    //this.add.image(heroX, heroY, "full", 712);
   }
 
   private drawHeroForState(state: State): void {
@@ -74,7 +76,7 @@ export default class MainGame extends Phaser.Scene {
   }
 
   public update(time: number, delta: number): void {
-    if (this.stepTimer > 200) {
+    if (this.stepTimer > 100) {
       this.handleStep();
       this.stepTimer = 0;
     } else {
@@ -107,13 +109,16 @@ export default class MainGame extends Phaser.Scene {
             this.add.image(xOff, yOff, "full", 25);
             break;
           case 'grass':
-            this.add.image(xOff, yOff, "full", 125);
+            this.add.image(xOff, yOff, "full", 7 * 32 - 3);
+            //this.add.image(xOff, yOff, "full", 125);
             break;
           case 'lightgrass':
-            this.add.image(xOff, yOff, "full", 126);
+            this.add.image(xOff, yOff, "full", 4 * 32 - 3);
+            //this.add.image(xOff, yOff, "full", 126);
             break;
           case 'bush':
-            this.add.image(xOff, yOff, "full", 122);
+            this.add.image(xOff, yOff, "full", 16 * 32 - 4);
+            //this.add.image(xOff, yOff, "full", 122);
             break;
           default:
             this.add.image(xOff, yOff, "full", 125);
