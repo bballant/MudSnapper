@@ -1,7 +1,7 @@
 ﻿/* If styling is required, add it here. */
 body {
 	background-color: #111;
-	color: #eee;
+	color: #FFC7E6;
 	font-family: sans-serif;
 	margin: 0;
 	padding: 0;
@@ -13,12 +13,19 @@ body {
   justify-content: center;
   font-family: monospace;
   white-space: pre;
+  /*
+  color: #93613A; // Earth
+  color: #3A6C93; // Complimentary Blue
+  */
+  
+  color: #3A9361;
+
 }
 
 #content {
   /*border: 0.05em solid black;*/
   width: 560px;
-  height: 562px; /* extra pixels creates a little border at bottom */
+  height: 560px;
 }
 
 #outer {
@@ -43,17 +50,27 @@ table #contenttable {
 table #consoletable {
     width: 400px;
     height: 640px;
+    max-height: 640px;
+    overflow: hidden;
     border-collapse: collapse;
 }
 
 table #infotable {
     width: 560px;
     height: 80px;
-    border-collapse: collapse;
     background-color: #282a36;
+    overflow: hidden;
+}
+
+table #infotable td {
+    padding-left: 2px;
+    width: 25%;
 }
 
 table #infotable ul {
+    font-size: 13px;
+    padding: 2px;
+    margin: 2px;
     list-style: none;
     overflow: hidden;
 }
@@ -70,8 +87,8 @@ td {
 
 #editor {
     width: 400px;
-    height: 400px;
-    color: #fff;
+    height: 365px; /* total height = 640. this = 640 - (240 + 35) because of console weirdness*/
+    color: #FFC7E6;
     background: #282a36;
     border-radius: 6px;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
@@ -87,5 +104,10 @@ td {
 
 #console {
     width: 400px;
-    height: 240px;
+    height: 275px;
 }
+
+/*
+LHS: editor+console+cli -- 400 + 240 + 35 = 275
+
+*/
