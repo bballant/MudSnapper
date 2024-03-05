@@ -14,6 +14,7 @@
 	},
 	"homepage": "https://github.com/JamesSkemp/phaser-3-vsc-typescript-nodejs",
 	"dependencies": {
+		"codejar": "^4.2.0",
 		"phaser": "^3.60.0"
 	},
 	"scripts": {

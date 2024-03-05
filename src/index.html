@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1" />
-	<title>Bone Shop</title>
+	<title>MUDSNAPPER</title>
 	<link rel="shortcut icon" href="favicon.ico" />
 	<link rel="stylesheet" href="app.css" type="text/css" />
 	<link rel="stylesheet" href="embed-console.css" type="text/css" />
@@ -13,7 +13,16 @@
 </head>
 <body>
 	<div id="title">
-		<h1>Bone Shop</h1>
+ ███▄ ▄███▓ █    ██ ▓█████▄   ██████  ███▄    █  ▄▄▄       ██▓███   ██▓███  ▓█████  ██▀███
+▓██▒▀█▀ ██▒ ██  ▓██▒▒██▀ ██▌▒██    ▒  ██ ▀█   █ ▒████▄    ▓██░  ██▒▓██░  ██▒▓█   ▀ ▓██ ▒ ██▒
+▓██    ▓██░▓██  ▒██░░██   █▌░ ▓██▄   ▓██  ▀█ ██▒▒██  ▀█▄  ▓██░ ██▓▒▓██░ ██▓▒▒███   ▓██ ░▄█ ▒
+▒██    ▒██ ▓▓█  ░██░░▓█▄   ▌  ▒   ██▒▓██▒  ▐▌██▒░██▄▄▄▄██ ▒██▄█▓▒ ▒▒██▄█▓▒ ▒▒▓█  ▄ ▒██▀▀█▄
+▒██▒   ░██▒▒▒█████▓ ░▒████▓ ▒██████▒▒▒██░   ▓██░ ▓█   ▓██▒▒██▒ ░  ░▒██▒ ░  ░░▒████▒░██▓ ▒██▒
+░ ▒░   ░  ░░▒▓▒ ▒ ▒  ▒▒▓  ▒ ▒ ▒▓▒ ▒ ░░ ▒░   ▒ ▒  ▒▒   ▓▒█░▒▓▒░ ░  ░▒▓▒░ ░  ░░░ ▒░ ░░ ▒▓ ░▒▓░
+░  ░      ░░░▒░ ░ ░  ░ ▒  ▒ ░ ░▒  ░ ░░ ░░   ░ ▒░  ▒   ▒▒ ░░▒ ░     ░▒ ░      ░ ░  ░  ░▒ ░ ▒░
+░      ░    ░░░ ░ ░  ░ ░  ░ ░  ░  ░     ░   ░ ░   ░   ▒   ░░       ░░          ░     ░░   ░
+       ░      ░        ░          ░           ░       ░  ░                     ░  ░   ░
+                     ░
 	</div>
 <div id="outer">
 	<table id="gametable">
@@ -21,14 +30,10 @@
 			<td>
 				<table id="consoletable">
 					<tr>
-						<td>
-							<div class="scratch">
-							   <textarea class="scratch"></textarea>
-							</div>
-						</td>
+						<td colspan="5"><div id="editor" /></td>
 					</tr>
 					<tr>
-						<td>
+						<td colspan="5">
 							<div id="console">
 							</div>
 						</td>
@@ -48,14 +53,26 @@
 								<tr>
 									<td>
 										<ul>
-											<li>Bones: 10</li>
-											<li>Level: 1</li>
+											<li>:help</li>
+											<li>:run</li>
+											<li>:example</li>
 										</ul>
 									</td>
 									<td>
 										<ul>
-										FREE SPELLS
-											<li>step</li>
+											<li>:clear</li>
+											<li>jump</li>
+											<li>color</li>
+										</ul>
+									</td>
+									<td>
+										<ul>
+											<li>forward</li>
+											<li>back</li>
+										</ul>
+									</td>
+									<td>
+										<ul>
 											<li>left</li>
 											<li>right</li>
 										</ul>
@@ -68,8 +85,6 @@
 			</td>
 		</tr>
 	</table>
-	<!--If using the project the TypeScript files will automatically be combined into the following file. Update as needed.-->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js" -></script>
 	<script src=" app.js"></script>
 </div>
 </body>

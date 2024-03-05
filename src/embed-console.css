@@ -2,23 +2,40 @@
 
 .console-sandbox {
   width: 100%;
-  background-color: white;
-  color: #222;
+  background-color: #282a36;
+  color: #70E173;
 }
+    /*
+    width: 400px;
+    height: 400px;
+    color: #fff;
+    background: #282a36;
+    border-radius: 6px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    font-family: monospace;
+    font-size: 14px;
+    font-weight: 400;
+    min-height: 240px;
+    letter-spacing: normal;
+    line-height: 20px;
+    padding: 10px;
+    tab-size: 4;
+    */
 
 .console-sandbox > ul {
   padding: 0;
   height: 240px;
-  border: solid 1px #cfd6d9;
+  /*border: solid 1px #cfd6d9;*/
   border-bottom: none;
   margin: 0;
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
   list-style: none;
   position: relative;
 }
 
 .console-sandbox > ul > li {
-  border-bottom: solid 1px #cfd6d9;
+  /*border-bottom: solid 1px #cfd6d9;*/
   width: 100%;
 }
 
@@ -47,7 +64,7 @@
   width: 10px;
   display: inline-block;
   margin-right: 5px;
-  color: #c5c1c0;
+  color: #70E173;
   position: absolute;
   left: 5px;
   top: 5px;
@@ -59,14 +76,14 @@
 .console-sandbox > .console-input {
   width: 100%;
   font-size: 14px;
-  padding: 5px;
+  padding: 8px;
   font-family: monospace;
   padding-left: 25px;
   position: relative;
-  border: solid 1px #cfd6d9;
+  border-top: solid 1px #70E173;
+  /*border: solid 1px #cfd6d9;*/
   overflow: hidden;
-  max-height: 100px;
-  margin-top: -1px;
+  height: 35px;
   outline: none;
 }
 
@@ -76,9 +93,11 @@
   position: absolute;
   top: calc( 50% - 18px/2 );
   left: 8px;
-  color: #328cc1;
+  color: #FF7AC5;
 }
 
-.console-sandbox > ul > li.log-error { background-color: rgba( 255,0,0,0.1 ); }
-.console-sandbox > ul > li.log-error > label > code:last-of-type { color: red; }
-.console-sandbox > ul > li.log-event { background-color: beige; }
+.console-sandbox > ul > li.log-error { background-color: rgba(131, 0, 0, 0.1); }
+.console-sandbox > ul > li.log-error > label > code:last-of-type { color: #70E173; }
+.console-sandbox > ul > li.log-event { background-color:#783560; color: #70E173; }
+/*.console-sandbox > ul > li.log-error > label > code:last-of-type { color: rgb(255, 202, 202); }*/
+/*.console-sandbox > ul > li.log-event { background-color: rgb(109, 109, 95); }*/
