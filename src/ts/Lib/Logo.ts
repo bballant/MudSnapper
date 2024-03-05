@@ -9,10 +9,11 @@ export type Command =
     'left' |
     'right' |
     'color' |
-    'repeat'
+    'jump'
+    // TODO 'repeat', 'to'
 
 const COMMANDS: Command[] = [
-    'forward', 'back', 'left', 'right', 'repeat', 'color'
+    'forward', 'back', 'left', 'right', 'color', 'jump'
 ]
 
 export type CommandCall = {
@@ -28,16 +29,16 @@ export type Point = {
     y: number
 }
 
-export type Color = 'ooze' | 'candy' | 'julius' | 'blood' | 'boring'
+export type Color = 'ooze' | 'candy' | 'julius' | 'blood' | 'boring' | 'none'
 
 const COLORS: Color[] = [
-    'ooze', 'candy', 'julius', 'blood', 'boring'
+    'ooze', 'candy', 'julius', 'blood', 'boring', 'none'
 ]
 
 export type State = {
     loc: Point,
     rot: number,
-    pen: Color | undefined
+    pen: Color | undefined | 'clear' // clear is a special pen that clears the whole board
 }
 
 export function parseScript(scriptStr: string): Script | undefined {
@@ -126,6 +127,15 @@ function oneNumParam(call: CommandCall): number {
     return ret;
 }
 
+function pointParams(call: CommandCall): Point {
+    const x = parseInt(call.params[0]);
+    const y = parseInt(call.params[0]);
+    if (call.params.length != 2 || Number.isNaN(x) || Number.isNaN(y)) {
+        throw Error(`Couldn't parse parameters for command ${call.command} ${call.params}`);
+    }
+    return { x: x, y: y };
+}
+
 function colorParam(call: CommandCall): Color {
     const color = call.params[0]
     if (!color || !COLORS.includes(color as Color)) {
@@ -179,32 +189,25 @@ function scriptToStatesFrom(currState: State, script: Script): State[] {
                 const points = getPointsForLine(currState.loc, end);
                 for (const p of points) {
                     currState.loc = p;
-                    states.push({
-                        loc: currState.loc,
-                        rot: currState.rot,
-                        pen: currState.pen
-                    })
+                    states.push({ ...currState });
                 }
                 break;
             }
             case ('left'):
             case ('right'): {
                 const mult1 = cmd == 'right' ? -1 : 1;
-                currState.rot = currState.rot + mult1 * oneNumParam(script[i])
-                states.push({
-                    loc: currState.loc,
-                    rot: currState.rot,
-                    pen: currState.pen
-                })
+                currState.rot = currState.rot + mult1 * oneNumParam(script[i]);
+                states.push({ ...currState });
                 break;
             }
             case ('color'): {
-                currState.pen = colorParam(script[i])
-                states.push({
-                    loc: currState.loc,
-                    rot: currState.rot,
-                    pen: currState.pen
-                })
+                currState.pen = colorParam(script[i]);
+                states.push({ ...currState });
+                break;
+            }
+            case ('jump'): {
+                currState.loc = pointParams(script[i]);
+                states.push({ ...currState });
                 break;
             }
         }

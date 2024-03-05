@@ -58,6 +58,166 @@ function resizeFn(width: number, height: number): () => void {
   }
 }
 
+function doAdminCommand(codeJarJar: any, command: string): string {
+  let result = command;
+  const tokens = command.trim().split(/\s+/);
+  console.log(tokens)
+  switch (tokens[0]) {
+    case ":help": {
+      if (!tokens[1]) {
+        result =
+          `Thanks for asking. I don't know what you were expecting.
+Type in a MudSnapper command to make MudSnapper do something.
+Type ':help commands' for a list of commands.
+Type ':help readme' to open up the README and learn what in tarnation this thing is.
+Type ':run' to run the MudSnapper script from the editor above.`
+      }
+      else if (tokens[1] === 'commands') {
+        result =
+          `Buckle up:
+* :help [commands|readme] - You are here.
+* :run - Run script above.
+* :example - Load example.
+* :clear - Free your mud.
+* jump x y - Jump baby, jump!
+* color [ooze|candy|julius|blood|boring|none]
+* forward/back n
+* left/right degrees - Turn baby, turn!`
+      }
+      else if (tokens[1] === 'readme') {
+        result = `Please go to https://github.com/bballant/MudSnapper/README.md`
+      }
+      else  {
+        throw new Error(`The command '${command}' is unknown to me.`)
+      }
+      break;
+    }
+    case ":run": {
+      let theScript = codeJarJar.toString();
+      const states = runScriptToStates(window.currState, theScript);
+      window.states = states.map((state) => {
+        state.loc = { x: state.loc.x, y: 40 - state.loc.y };
+        state.rot = -1 * state.rot;
+        return state;
+      });
+      break;
+    }
+    case ":example2": {
+      let theCode =
+      `jump 20 10
+color ooze
+right 10
+forward 15
+back 15
+color candy
+right 10
+forward 15
+back 15
+color blood
+right 10
+forward 15
+back 15
+color julius
+right 10
+forward 15
+back 15
+color ooze
+right 10
+forward 15
+back 15
+color candy
+right 10
+forward 15
+back 15
+color blood
+right 10
+forward 15
+back 15
+color julius
+right 10
+forward 15
+back 15
+color ooze
+right 10
+forward 15
+back 15
+color candy
+right 10
+forward 15
+back 15
+color blood
+right 10
+forward 15
+back 15
+color julius
+right 10
+forward 15
+back 15
+color ooze
+right 10
+forward 15
+back 15
+color candy
+right 10
+forward 15
+back 15
+color blood
+right 10
+forward 15
+back 15
+color julius
+right 10
+forward 15
+back 15
+`
+      codeJarJar.updateCode(theCode)
+      break;
+    }
+    case ":example": {
+      let theCode =
+        `jump 20 20
+color boring
+forward 2
+left 90
+color ooze
+forward 3
+left 90
+color candy
+forward 5
+left 90
+color blood
+forward 8
+left 90
+color boring
+forward 14
+left 90
+color ooze
+forward 22
+left 90
+color boring
+forward 14
+left 90
+color blood
+forward 8
+left 90
+color candy
+forward 5
+left 90
+color ooze
+forward 3
+left 90
+color boring
+forward 2
+      `
+      codeJarJar.updateCode(theCode)
+      break;
+    }
+    default:
+      throw new Error(`The command '${command}' is unknown to me.`)
+  }
+  return result;
+}
+
 window.onload = (): void => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const game = new Game(gameConfig);
@@ -72,22 +232,43 @@ window.onload = (): void => {
     editor.innerHTML = code
   }
 
-  CodeJar(document.querySelector("#editor"), highlight);
+  let jar = CodeJar(document.querySelector("#editor"), highlight);
+
   window.currState = {
-    loc: {x: 0, y: 0},
+    loc: { x: 0, y: 0 },
     rot: 0,
     pen: undefined
   }
 
   //const cool = new EmbedConsole('console');
-  const cool = EmbedConsole.customInit('console', (command) => {
+  const cool = EmbedConsole.customInit('console', (c, command) => {
+    let output = command;
+
+    if (command.startsWith(":clear")) {
+      window.states = [{
+        loc: { x: 0, y: 0 },
+        rot: 0,
+        pen: 'clear'
+      }];
+    } else if (command.startsWith(":")) {
+      output = doAdminCommand(jar, command);
+    } else {
       const states = runScriptToStates(window.currState, command);
       window.states = states.map((state) => {
         state.loc = { x: state.loc.x, y: 40 - state.loc.y };
         state.rot = -1 * state.rot;
         return state;
       });
-    return command;
+    }
+
+    c.add({
+      input: command,
+      output: output,
+      klass: 'mud-command',
+      javascript: false
+    });
+
+    return output;
   })
 
   cool.add({

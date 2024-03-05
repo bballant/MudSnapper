@@ -49,8 +49,14 @@ export default class MainGame extends Phaser.Scene {
   }
 
   private drawMudForState(state: State): void {
-    if (!state.pen) {
-      // no pen color set
+    if (!state.pen || state.pen === 'none') {
+      // no pen set or pen set to 'none'
+      return;
+    }
+
+    // this might be really bad!
+    if (state.pen === 'clear') {
+      this.create();
       return;
     }
 
