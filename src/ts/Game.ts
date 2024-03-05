@@ -4,7 +4,7 @@ import Utilities from "./Lib/Utilities";
 import MainGame from "./Scenes/MainGame";
 import EmbedConsole from './Lib/EmbedConsole';
 import { CodeJar } from 'codejar';
-import { State } from './Lib/Logo';
+import { State, gimmeSomeStates, runScriptToStates } from './Lib/Logo';
 
 const scaleSize = 560;
 const gameSize = 420;
@@ -13,6 +13,7 @@ const gameSize = 420;
 declare global {
   interface Window {
     states: State[];
+    currState: State;
   }
 }
 
@@ -72,11 +73,26 @@ window.onload = (): void => {
   }
 
   CodeJar(document.querySelector("#editor"), highlight);
+  window.currState = {
+    loc: {x: 0, y: 0},
+    rot: 0,
+    pen: undefined
+  }
 
-  const cool = new EmbedConsole('console');
+  //const cool = new EmbedConsole('console');
+  const cool = EmbedConsole.customInit('console', (command) => {
+      const states = runScriptToStates(window.currState, command);
+      window.states = states.map((state) => {
+        state.loc = { x: state.loc.x, y: 40 - state.loc.y };
+        state.rot = -1 * state.rot;
+        return state;
+      });
+    return command;
+  })
+
   cool.add({
     input: "",
-    output: "<b>Welcome to MUDSNAPPER!</b><br/>type 'help' for \"help\" (muhuhahaha!)",
+    output: "<b>Welcome to MUDSNAPPER!</b><br/>type ':help' for \"help\" (Muhuhahaha!)",
     klass: 'log-event',
     javascript: false
   });

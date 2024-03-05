@@ -8,10 +8,11 @@ export type Command =
     'back' |
     'left' |
     'right' |
+    'color' |
     'repeat'
 
 const COMMANDS: Command[] = [
-    'forward', 'back', 'left', 'right', 'repeat'
+    'forward', 'back', 'left', 'right', 'repeat', 'color'
 ]
 
 export type CommandCall = {
@@ -27,15 +28,19 @@ export type Point = {
     y: number
 }
 
-export type Color = 'red' | 'yellow' | 'brown' | 'none'
+export type Color = 'ooze' | 'candy' | 'julius' | 'blood' | 'boring'
+
+const COLORS: Color[] = [
+    'ooze', 'candy', 'julius', 'blood', 'boring'
+]
 
 export type State = {
     loc: Point,
     rot: number,
-    pen: Color
+    pen: Color | undefined
 }
 
-function parseScript(scriptStr: string): Script | undefined {
+export function parseScript(scriptStr: string): Script | undefined {
     const tokens = scriptStr.trim().split(/\s+/);
     const callAcc: CommandCall[] = [];
     let currCommand: Command | undefined;
@@ -121,6 +126,13 @@ function oneNumParam(call: CommandCall): number {
     return ret;
 }
 
+function colorParam(call: CommandCall): Color {
+    const color = call.params[0]
+    if (!color || !COLORS.includes(color as Color)) {
+        throw Error(`Couldn't parse parameter for command ${call.command} ${call.params}`);
+    }
+    return color as Color;
+}
 
 function getPointsForLine(start: Point, end: Point): Point[] {
     let x0 = start.x;
@@ -155,12 +167,7 @@ function getPointsForLine(start: Point, end: Point): Point[] {
     return ret;
 }
 
-function scriptToStates(start: Point, script: Script): State[] {
-    const currState: State = {
-        loc: start,
-        rot: 0,
-        pen: 'brown'
-    }
+function scriptToStatesFrom(currState: State, script: Script): State[] {
     const states: State[] = []
     for (let i = 0; i < script.length; i++) {
         const cmd = script[i].command;
@@ -191,9 +198,32 @@ function scriptToStates(start: Point, script: Script): State[] {
                 })
                 break;
             }
+            case ('color'): {
+                currState.pen = colorParam(script[i])
+                states.push({
+                    loc: currState.loc,
+                    rot: currState.rot,
+                    pen: currState.pen
+                })
+                break;
+            }
         }
     }
     return states;
+}
+
+function scriptToStates(start: Point, script: Script): State[] {
+    const currState: State = {
+        loc: start,
+        rot: 0,
+        pen: 'boring'
+    }
+    return scriptToStatesFrom(currState, script);
+}
+
+export function runScriptToStates(currState: State, scriptStr: string): State[] {
+    const script = parseScript(scriptStr);
+    return scriptToStatesFrom(currState, script);
 }
 
 function runScript(board: number[][], start: Point, script: Script): number[][] {

@@ -13,6 +13,7 @@ type HistoryItem = {
 class EmbedConsole {
   id: string;
   highlightCallback: (logItem: HTMLElement) => void;
+  customExecute: (command: string) => string = undefined;
   elements: {
     parent: HTMLElement;
     container: HTMLDivElement;
@@ -58,6 +59,12 @@ class EmbedConsole {
         e.innerText = '';
       }
     };
+  }
+
+  static customInit(containerId: string, execFn: (a: string) => string, opts?: any): EmbedConsole {
+    const ret = new EmbedConsole(containerId, opts);
+    ret.customExecute = execFn;
+    return ret;
   }
 
   defaultHighlightCallback(logItem: HTMLElement): void {
@@ -139,11 +146,14 @@ class EmbedConsole {
   execute(command: string): void {
     let output;
     try {
-      output = eval.call({}, command);
+      if (this.customExecute) {
+        output = this.customExecute(command);
+      } else {
+        output = eval.call({}, command);
+      }
     } catch (e) {
       output = e;
     }
-
     this.add({ input: command, output: output });
     this.history.reset(this.elements.input);
   }

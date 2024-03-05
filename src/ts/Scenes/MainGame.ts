@@ -1,6 +1,6 @@
 import Utilities from "../Lib/Utilities";
 import { Cell, CellType } from "../Lib/Types";
-import { State, gimmeSomeStates } from "../Lib/Logo";
+import { State, Color, gimmeSomeStates } from "../Lib/Logo";
 
 export default class MainGame extends Phaser.Scene {
   public static Name = "MainGame";
@@ -49,15 +49,53 @@ export default class MainGame extends Phaser.Scene {
   }
 
   private drawMudForState(state: State): void {
+    if (!state.pen) {
+      // no pen color set
+      return;
+    }
+
+    // returns a new scale for the mud image
+    // based on the rotation
+    function scaleForAngle(angle: number): number {
+      // Normalize angle to be within 0 to 360 degrees
+      let normalizedAngle = angle % 360;
+      if (normalizedAngle < 0) {
+        normalizedAngle += 360;
+      }
+      // Calculate the nearest multiple of 45 degrees
+      const nearest45 = Math.round(normalizedAngle / 45) * 45;
+      // Calculate the difference to the nearest multiple of 45 degrees
+      const diff = Math.abs(normalizedAngle - nearest45);
+      // Scale the difference to be within the range [0, 22.5],
+      // which is half the distance between multiples of 45 degrees
+      const scaledDiff = diff > 22.5 ? 45 - diff : diff;
+      // Map the scaled difference to the range [1, 1.45],
+      // where 0 difference results in 1 and 22.5 results in 1.45
+      const value = 1 + (0.45 * (22.5 - scaledDiff) / 22.5);
+      return value;
+    }
+ 
+    const mudColors = new Map<Color, number>([
+      ['ooze',   (32 * 30) + 9],
+      ['julius',  (32 * 32) + 6],
+      ['candy', (32 * 30) + 7],
+      ['blood',  (32 * 34) + 9],
+      ['boring', (32 * 30) + 1]
+    ]);
+
     const heroX = (state.loc.x * this.tileSize) + (this.tileSize / 2);
     const heroY = (state.loc.y * this.tileSize) + (this.tileSize / 2);
-    this.add.image(heroX, heroY, "full", (32 * 32) + 2);
-    //this.add.image(heroX, heroY, "full", 712);
+    const image = this.add.image(heroX, heroY, "full", mudColors.get(state.pen));
+    image.scaleY = Utilities.RandomDecimal(0.5, 0.8);
+    const xScale = scaleForAngle(state.rot)
+    image.scaleX = Utilities.RandomDecimal(xScale - 0.2, xScale);
+    image.angle = Utilities.RandomDecimal(state.rot - 7, state.rot + 7);
   }
 
   private drawHeroForState(state: State): void {
     const heroX = (state.loc.x * this.tileSize) + (this.tileSize / 2);
     const heroY = (state.loc.y * this.tileSize) + (this.tileSize / 2);
+    this.heroSprite.setScale(1.5);
     this.heroSprite.x = heroX;
     this.heroSprite.y = heroY;
     this.heroSprite.angle = state.rot;
@@ -137,7 +175,7 @@ export default class MainGame extends Phaser.Scene {
       window.states.push({
         loc: { x: heroX, y: heroY },
         rot: 0,
-        pen: 'brown'
+        pen: 'ooze'
       })
     }
     if (pointer.middleButtonDown()) {

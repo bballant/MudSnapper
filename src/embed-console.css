@@ -3,7 +3,7 @@
 .console-sandbox {
   width: 100%;
   background-color: #282a36;
-  color: #FFC7E6;
+  color: #70E173;
 }
     /*
     width: 400px;
@@ -64,7 +64,7 @@
   width: 10px;
   display: inline-block;
   margin-right: 5px;
-  color: #FFC7E6;
+  color: #70E173;
   position: absolute;
   left: 5px;
   top: 5px;
@@ -80,11 +80,10 @@
   font-family: monospace;
   padding-left: 25px;
   position: relative;
-  border-top: solid 1px #FFC7E6;
+  border-top: solid 1px #70E173;
   /*border: solid 1px #cfd6d9;*/
   overflow: hidden;
   height: 35px;
-  margin-top: -1px;
   outline: none;
 }
 
@@ -98,7 +97,7 @@
 }
 
 .console-sandbox > ul > li.log-error { background-color: rgba(131, 0, 0, 0.1); }
-.console-sandbox > ul > li.log-error > label > code:last-of-type { color: #FFC7E6; }
-.console-sandbox > ul > li.log-event { background-color:#3A9361; color: #FFC7E6; }
+.console-sandbox > ul > li.log-error > label > code:last-of-type { color: #70E173; }
+.console-sandbox > ul > li.log-event { background-color:#783560; color: #70E173; }
 /*.console-sandbox > ul > li.log-error > label > code:last-of-type { color: rgb(255, 202, 202); }*/
 /*.console-sandbox > ul > li.log-event { background-color: rgb(109, 109, 95); }*/

@@ -19,4 +19,8 @@ export default class Utilities {
   public static Range(start: number, end: number): number[] {
     return Array.from(Array(end - start + 1).keys()).map(x => x + start);
   }
+
+  public static RandomDecimal(min: number, max: number): number {
+    return Math.random() * (max - min) + min;
+  }
 }
