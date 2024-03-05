@@ -49,14 +49,8 @@ export default class MainGame extends Phaser.Scene {
   }
 
   private drawMudForState(state: State): void {
-    if (!state.pen || state.pen === 'none') {
+    if (!state.pen || state.pen === 'none' || state.pen === 'clear') {
       // no pen set or pen set to 'none'
-      return;
-    }
-
-    // this might be really bad!
-    if (state.pen === 'clear') {
-      this.create();
       return;
     }
 
@@ -115,6 +109,11 @@ export default class MainGame extends Phaser.Scene {
     if (state) {
       this.drawMudForState(state);
       this.drawHeroForState(state);
+      // hacky and might be really bad!
+      if (state.pen && state.pen === 'clear') {
+        // resets the scene
+        this.create();
+      }
     }
     window.states = states.reverse();
   }

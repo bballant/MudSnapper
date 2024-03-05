@@ -246,7 +246,7 @@ window.onload = (): void => {
 
     if (command.startsWith(":clear")) {
       window.states = [{
-        loc: { x: 0, y: 0 },
+        loc: { x: -20, y: -20 }, // put it off the screen
         rot: 0,
         pen: 'clear'
       }];
